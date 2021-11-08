@@ -28,6 +28,7 @@ class CardListAdapter(private val context:Activity, private val cards: ArrayList
         val imageBytes = Base64.decode(cards[position].image.removePrefix("data:image/png;base64,"), Base64.DEFAULT)
         val decodedByte = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         imageView.setImageBitmap(decodedByte)
+        imageView.setTag(cards[position].id)
         descriptionText.text = cards[position].description
         starsText.text = cards[position].stars.toString() + " stars"
         addedOnText.text = cards[position].addedOn.toString()

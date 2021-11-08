@@ -87,7 +87,6 @@
                 <ImageView
                     android:id="@+id/image_view_camera"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/icon_add"
                     android:layout_width="wrap_content" />
                 <Button
                     android:id="@+id/btn_add"

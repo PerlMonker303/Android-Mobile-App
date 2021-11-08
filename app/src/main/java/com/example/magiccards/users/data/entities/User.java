@@ -1,4 +1,4 @@
-package com.example.magiccards.Model;
+package com.example.magiccards.users.data.entities;
 
 public class User {
     private Integer id;

@@ -17,15 +17,19 @@ public class Card {
     private Double latitude;
     private Double longitude;
 
-    private Card(){}
+    public Card(){}
 
-    public Card(Integer id, String title, String description, String addedOn, Integer stars, Boolean rare) {
+    public Card(Integer id, String title, String description, Integer stars, String addedOn, Boolean rare, String image, Integer postedBy, Double latitude, Double longitude) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.addedOn = addedOn;
         this.stars = stars;
+        this.addedOn = addedOn;
         this.rare = rare;
+        this.image = image;
+        this.postedBy = postedBy;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public Integer getId() {
