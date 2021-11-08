@@ -19,14 +19,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:background="#444444"
         android:padding="25dp"
         android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="25sp"
-            android:textColor="#6dffbf"
+            android:textColor="@color/black"
             android:padding="10dp"
             android:text="@string/title"/>
         <EditText
@@ -42,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="25sp"
-            android:textColor="#6dffbf"
+            android:textColor="@color/black"
             android:padding="10dp"
             android:text="@string/description"/>
         <EditText
@@ -58,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="25sp"
-            android:textColor="#6dffbf"
+            android:textColor="@color/black"
             android:padding="10dp"
             android:text="@string/stars"/>
         <EditText
@@ -74,7 +73,7 @@
             android:imeOptions="actionDone"/>
         <CheckBox
             android:id="@+id/cb_rare"
-            android:textColor="#6dffbf"
+            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rare"/>
@@ -94,6 +93,13 @@
             android:textAllCaps="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
+        <ProgressBar
+            android:id="@+id/edit_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

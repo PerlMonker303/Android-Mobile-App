@@ -5,8 +5,11 @@
       <map>
         <entry key="..\:/An3Sem1/ma/android/MagicCards/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3828125" />
         <entry key="..\:/An3Sem1/ma/android/MagicCards/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22135416666666666" />
+        <entry key="..\:/An3Sem1/ma/android/MagicCards/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.162890625" />
+        <entry key="..\:/An3Sem1/ma/android/MagicCards/app/src/main/res/layout-w936dp/activity_login.xml" value="0.13465952563121653" />
         <entry key="..\:/An3Sem1/ma/android/MagicCards/app/src/main/res/layout/activity_add_card.xml" value="0.1358695652173913" />
         <entry key="..\:/An3Sem1/ma/android/MagicCards/app/src/main/res/layout/activity_edit_card.xml" value="0.1" />
+        <entry key="..\:/An3Sem1/ma/android/MagicCards/app/src/main/res/layout/activity_login.xml" value="0.17831813576494426" />
         <entry key="..\:/An3Sem1/ma/android/MagicCards/app/src/main/res/layout/card.xml" value="0.20520833333333333" />
         <entry key="..\:/An3Sem1/ma/android/MagicCards/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.2777777777777778" />
         <entry key="..\:/An3Sem1/ma/android/MagicCards/app/src/main/res/xml/network_security_config.xml" value="0.1" />

@@ -29,6 +29,8 @@ import java.text.SimpleDateFormat
 import android.util.Base64
 import androidx.core.graphics.drawable.toBitmap
 import com.example.magiccards.cards.data.remote.Api
+import com.example.magiccards.users.data.entities.User
+import com.google.gson.Gson
 import java.io.ByteArrayOutputStream
 
 
@@ -39,6 +41,8 @@ class AddCardActivity : AppCompatActivity() {
     private val MY_CAMERA_PERMISSION_CODE = 100
     lateinit var locationManager: LocationManager
     private var locationGps = Location("here")
+    private lateinit var loggedUser : User
+    private lateinit var loading: ProgressBar
 
     fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
         val formatter = SimpleDateFormat(format, locale)
@@ -50,6 +54,9 @@ class AddCardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_card)
 
+        loading = findViewById<ProgressBar>(R.id.add_loading)
+        loggedUser = Gson().fromJson(intent.getStringExtra("loggedUser"), User::class.java)
+
         val et_title = findViewById(R.id.et_title) as EditText
         val et_description = findViewById(R.id.et_description) as EditText
         val et_stars = findViewById(R.id.et_stars) as EditText
@@ -58,6 +65,7 @@ class AddCardActivity : AppCompatActivity() {
         val btn_add = findViewById(R.id.btn_add) as Button
 
         btn_add.setOnClickListener {
+            runOnUiThread {loading.visibility = View.VISIBLE}
             getLocation()
             val title = et_title.text.toString();
             val description = et_description.text.toString();
@@ -68,13 +76,14 @@ class AddCardActivity : AppCompatActivity() {
             val stream = ByteArrayOutputStream()
             bitmap?.compress(Bitmap.CompressFormat.PNG, 90, stream)
             var image_base64: String = Base64.encodeToString(stream.toByteArray(), 0)
-            var posted_by = 1;
+            var posted_by = loggedUser.id;
             val latitude = locationGps.latitude
             val longitude = locationGps.longitude
             val card = Card(-1, title, description, stars, added_on, rare, image_base64, posted_by, latitude, longitude)
 
             Thread {
                 val resp = Api().addCard(card)
+                runOnUiThread {loading.visibility = View.GONE}
 //                Toast.makeText(this, "Card added successfully", Toast.LENGTH_LONG).show()
                 goBack(null)
             }.start()
@@ -152,13 +161,7 @@ class AddCardActivity : AppCompatActivity() {
         }
     }
 
-    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-        }
-    }
-
     fun goBack(view: View?){
-        val intent = Intent(this, MainActivity::class.java)
-        resultLauncher.launch(intent)
+        this.finish()
     }
 }

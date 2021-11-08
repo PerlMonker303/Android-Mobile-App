@@ -12,10 +12,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
 import android.view.View
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.ImageView
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toBitmap
@@ -30,13 +27,14 @@ class EditCardActivity : AppCompatActivity() {
     private val CAMERA_REQUEST = 1888
     private var image_view: ImageView? = null
     private val MY_CAMERA_PERMISSION_CODE = 100
+    private lateinit var loading: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_card)
 
-        val myIntent = intent
-        val cardId = myIntent.getStringExtra("cardId")
+        loading = findViewById<ProgressBar>(R.id.edit_loading)
+        val cardId = intent.getStringExtra("cardId")
         System.out.println(cardId)
         var card = Card()
 
@@ -49,6 +47,8 @@ class EditCardActivity : AppCompatActivity() {
         btn_update.setEnabled(false);
 
         btn_update.setOnClickListener {
+            runOnUiThread {loading.visibility = View.VISIBLE}
+            btn_update.setEnabled(false);
             Thread {
                 card.id = Integer.parseInt(cardId)
                 card.title = et_title.text.toString()
@@ -61,12 +61,14 @@ class EditCardActivity : AppCompatActivity() {
                 card.image = Base64.encodeToString(stream.toByteArray(), 0)
 
                 val resp = Api().updateCard(card)
+                runOnUiThread {loading.visibility = View.GONE}
                 goBack(null)
             }.start()
         }
 
         // get card by id
         Thread {
+            runOnUiThread {loading.visibility = View.VISIBLE}
             card = Api().getCard(cardId!!)
 
             runOnUiThread {
@@ -78,18 +80,13 @@ class EditCardActivity : AppCompatActivity() {
                 val decodedByte = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                 image_view?.setImageBitmap(decodedByte)
                 btn_update.setEnabled(true);
+                runOnUiThread {loading.visibility = View.GONE}
             }
         }.start()
     }
 
-    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-        }
-    }
-
     fun goBack(view: View?){
-        val intent = Intent(this, MainActivity::class.java)
-        resultLauncher.launch(intent)
+        this.finish()
     }
 
     @RequiresApi(Build.VERSION_CODES.M)

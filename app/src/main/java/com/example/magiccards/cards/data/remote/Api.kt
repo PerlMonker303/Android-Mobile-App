@@ -1,6 +1,7 @@
 package com.example.magiccards.cards.data.remote
 
 import com.example.magiccards.cards.data.entities.Card
+import com.example.magiccards.users.data.entities.User
 import com.google.gson.Gson
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -15,7 +16,6 @@ class Api {
     val base_url = "http://"+ip+":3000/"
     val client = OkHttpClient()
     val gson = Gson()
-
 
     public fun getCards() : ArrayList<Card> {
         val request: Request = Request.Builder()
@@ -77,6 +77,19 @@ class Api {
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
             return response.body!!.string()
+        }
+    }
+
+    public fun getUser(username: String) : User {
+        val request: Request = Request.Builder()
+            .url(base_url + "user?username=" + username)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+            val resp = response.body!!.string()
+            return this.gson.fromJson(resp, User::class.java) as User
         }
     }
 }
