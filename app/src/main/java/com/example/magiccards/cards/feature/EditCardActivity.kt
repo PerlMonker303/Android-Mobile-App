@@ -35,7 +35,7 @@ class EditCardActivity : AppCompatActivity() {
 
         loading = findViewById<ProgressBar>(R.id.edit_loading)
         val cardId = intent.getStringExtra("cardId")
-        System.out.println(cardId)
+        val token = intent.getStringExtra("token")
         var card = Card()
 
         val et_title = findViewById(R.id.et_title) as EditText
@@ -60,7 +60,7 @@ class EditCardActivity : AppCompatActivity() {
                 bitmap?.compress(Bitmap.CompressFormat.PNG, 90, stream)
                 card.image = Base64.encodeToString(stream.toByteArray(), 0)
 
-                val resp = Api().updateCard(card)
+                val resp = Api().updateCard(card, token!!)
                 runOnUiThread {loading.visibility = View.GONE}
                 goBack(null)
             }.start()
@@ -69,7 +69,7 @@ class EditCardActivity : AppCompatActivity() {
         // get card by id
         Thread {
             runOnUiThread {loading.visibility = View.VISIBLE}
-            card = Api().getCard(cardId!!)
+            card = Api().getCard(cardId!!, token!!)
 
             runOnUiThread {
                 et_title.setText(card.title)

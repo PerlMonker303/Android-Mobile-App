@@ -54,6 +54,8 @@ class AddCardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_card)
 
+        val token = intent.getStringExtra("token")
+
         loading = findViewById<ProgressBar>(R.id.add_loading)
         loggedUser = Gson().fromJson(intent.getStringExtra("loggedUser"), User::class.java)
 
@@ -82,7 +84,7 @@ class AddCardActivity : AppCompatActivity() {
             val card = Card(-1, title, description, stars, added_on, rare, image_base64, posted_by, latitude, longitude)
 
             Thread {
-                val resp = Api().addCard(card)
+                val resp = Api().addCard(card, token!!)
                 runOnUiThread {loading.visibility = View.GONE}
 //                Toast.makeText(this, "Card added successfully", Toast.LENGTH_LONG).show()
                 goBack(null)

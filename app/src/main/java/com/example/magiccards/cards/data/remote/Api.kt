@@ -12,27 +12,29 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
 class Api {
-    val ip = "172.29.240.1"
+    val ip = "172.26.112.1"
     val base_url = "http://"+ip+":3000/"
     val client = OkHttpClient()
     val gson = Gson()
 
-    public fun getCards() : ArrayList<Card> {
+    public fun getCards(token: String) : ArrayList<Card> {
         val request: Request = Request.Builder()
-            .url(base_url + "cards")
+            .url(base_url + "cards?token=" + token)
             .build()
 
         client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            if (!response.isSuccessful){
+                throw IOException("Unexpected code $response")
+            }
 
             val resp = response.body!!.string()
             return this.gson.fromJson(resp, Array<Card>::class.java).toList() as ArrayList<Card>
         }
     }
 
-    public fun getCard(id: String) : Card {
+    public fun getCard(id: String, token: String) : Card {
         val request: Request = Request.Builder()
-            .url(base_url + "card?id=" + id)
+            .url(base_url + "card?id=" + id + "&token=" + token)
             .build()
 
         client.newCall(request).execute().use { response ->
@@ -43,15 +45,14 @@ class Api {
         }
     }
 
-    public fun addCard(card: Card) : String {
+    public fun addCard(card: Card, token: String) : String {
 
         val JSON: MediaType? = "application/json; charset=utf-8".toMediaTypeOrNull()
         val body: RequestBody = gson.toJson(card).toRequestBody(JSON)
 
         val request: Request = Request.Builder()
-            .url(base_url + "card")
+            .url(base_url + "card?token=" + token)
             .post(body)
-//                .addHeader("Authorization", header)
             .build()
 
         client.newCall(request).execute().use { response ->
@@ -61,16 +62,15 @@ class Api {
         }
     }
 
-    public fun updateCard(card: Card) : String {
+    public fun updateCard(card: Card, token: String) : String {
         val JSON: MediaType? = "application/json; charset=utf-8".toMediaTypeOrNull()
         val body: RequestBody = gson.toJson(card).toRequestBody(JSON)
 
         val client = OkHttpClient()
 
         val request: Request = Request.Builder()
-            .url(base_url + "card?id=" + card.id)
-            .put(body) //PUT
-//                .addHeader("Authorization", header)
+            .url(base_url + "card?id=" + card.id + "&token=" + token)
+            .put(body)
             .build()
 
         client.newCall(request).execute().use { response ->
@@ -80,9 +80,9 @@ class Api {
         }
     }
 
-    public fun getUser(username: String) : User {
+    public fun getUser(username: String, token: String) : User {
         val request: Request = Request.Builder()
-            .url(base_url + "user?username=" + username)
+            .url(base_url + "user?username=" + username + "&token=" + token)
             .build()
 
         client.newCall(request).execute().use { response ->

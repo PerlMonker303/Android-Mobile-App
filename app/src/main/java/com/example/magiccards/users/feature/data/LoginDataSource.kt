@@ -15,7 +15,7 @@ import java.io.IOException
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 class LoginDataSource {
-    val ip = "172.29.240.1"
+    val ip = "172.26.112.1"
     val base_url = "http://"+ip+":3000/"
     val client = OkHttpClient()
     val gson = Gson()

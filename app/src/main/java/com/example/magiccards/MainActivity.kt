@@ -33,18 +33,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        list_cards = findViewById<ListView>(R.id.list_cards)
+        loading = findViewById<ProgressBar>(R.id.main_loading)
+
         // update username text
         val username = intent.getStringExtra("username")
         setTitle("Magic Cards - " + username)
 
+        val token = intent.getStringExtra("token")
+
         // fetch current user
         if (username != null) {
-            getUser(username)
+            val t = Thread { this.user = Api().getUser(username, token!!) }
+            t.start()
+            t.join() // waiting for the previous operation to finish
+            loadCards()
         }
-
-        list_cards = findViewById<ListView>(R.id.list_cards)
-        loading = findViewById<ProgressBar>(R.id.main_loading)
-        loadCards()
     }
 
     override fun onResume() {
@@ -57,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         list_cards.adapter = cardListAdapter;
         loading.visibility = View.VISIBLE
         Thread {
-            this.cards = Api().getCards()
+            this.cards = Api().getCards(user?.token)
 
             runOnUiThread {
                 val cardListAdapter = CardListAdapter(this, cards)
@@ -70,12 +74,6 @@ class MainActivity : AppCompatActivity() {
         list_cards.adapter = cardListAdapter;
     }
 
-    fun getUser(username : String){
-        Thread(){
-            this.user = Api().getUser(username)
-        }.start()
-    }
-
     var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
         }
@@ -84,6 +82,7 @@ class MainActivity : AppCompatActivity() {
     fun handleAddClicked(item: MenuItem) {
         val intent = Intent(this, AddCardActivity::class.java)
         intent.putExtra("loggedUser", Gson().toJson(this.user))
+        intent.putExtra("token", user.token)
         resultLauncher.launch(intent)
     }
 
@@ -95,6 +94,7 @@ class MainActivity : AppCompatActivity() {
     fun handleCardClicked(view: View) {
         val intent = Intent(this, EditCardActivity::class.java)
         intent.putExtra("cardId", view.getTag().toString())
+        intent.putExtra("token", user.token)
         resultLauncher.launch(intent)
     }
 
